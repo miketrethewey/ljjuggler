@@ -2,7 +2,6 @@
 function setTheme() {
 	let color = document.getElementById("theme").value;
 	let bodyElement = document.getElementsByTagName("body")[0];
-
 	bodyElement.className = color;
 	return color
 }
@@ -13,16 +12,14 @@ function saveThemeChoice(color) {
 
 // function to export accounts to file
 function exportAccounts() {
-	chrome.runtime.sendMessage({"command":"localStorage","mode":"get","key":"lj_juggler_accounts"}, function (list)
-	{
+	chrome.runtime.sendMessage({"command":"localStorage","mode":"get","key":"lj_juggler_accounts"}, function (list) {
 		let accounts = new Blob([JSON.stringify(list.value)], {type: 'application/json;base64'});
 		let url = URL.createObjectURL(accounts);
-
-	chrome.downloads.download({
-		url: url,
-		filename: 'juggler_accounts.json'
+		chrome.downloads.download({
+			url: url,
+			filename: 'juggler_accounts.json'
+		});
 	});
-});
 }
 
 // functions to import account list saved as json file
@@ -32,28 +29,26 @@ function handleFile() {
 	reader.onload = importAccounts;
 	reader.readAsText(file);
 }
-function importAccounts()	{
-		let json = JSON.parse(this.result);
-		chrome.runtime.sendMessage({"command":"localStorage","mode":"set","key":"lj_juggler_accounts","value":json});
-		drawlist();
-		document.getElementById("browse").value = '';
-	}
 
-function drawlist()
-{
-	chrome.runtime.sendMessage({"command":"localStorage","mode":"get","key":"lj_juggler_accounts"}, function (response)
-	{
+function importAccounts()	{
+	let json = JSON.parse(this.result);
+	chrome.runtime.sendMessage({"command":"localStorage","mode":"set","key":"lj_juggler_accounts","value":json});
+	drawlist();
+	document.getElementById("browse").value = '';
+}
+
+function drawlist() {
+	chrome.runtime.sendMessage({"command":"localStorage","mode":"get","key":"lj_juggler_accounts"}, function (response) 	{
 		var account_list = new Array;
-		if(response.value) account_list = JSON.parse(response.value);
+		if(response.value) {
+			account_list = JSON.parse(response.value);
+		}
 		account_list.sort(accountsort);
 		document.getElementById("account-list").innerHTML = "";
-
 		current_site = "";
-		for(var i = 0; i < account_list.length; i++)
-		{
+		for(var i = 0; i < account_list.length; i++) 		{
 			// If this is the first account from this site, add a heading for the site.
-			if(account_list[i].site_info.name != current_site)
-			{
+			if(account_list[i].site_info.name != current_site) {
 				var this_header = document.createElement('div');
 				this_header.setAttribute('class','site-label');
 				this_header.textContent = account_list[i].site_info.name;
@@ -62,10 +57,17 @@ function drawlist()
 			}
 			var account = account_list[i];
 			var next_account = document.createElement("li");
+			var userhead = document.createElement("img");
+			userhead.src = account_list[i].site_info.userhead;
+			userhead.width = 17;
+			userhead.height = 17;
+			userhead.style.verticalAlign = "middle";
+			var username = document.createTextNode(account.username);
 			var delete_button = document.createElement("button");
 			delete_button.id = account.username;
 			delete_button.onclick = delete_clicker(account);
-			next_account.textContent = account.username;
+			next_account.appendChild(userhead);
+			next_account.appendChild(username);
 			next_account.appendChild(delete_button);
 			document.getElementById("account-list").appendChild(next_account);
 		}
@@ -78,29 +80,24 @@ function drawlist()
 			document.getElementById("login_action").value = response.value;
 		});
 		document.getElementById("login_action").addEventListener('change', function(event) {
-
-                        chrome.runtime.sendMessage({"command":"localStorage","mode":"set","key":"login_action","value":event.target.value});
+			chrome.runtime.sendMessage({"command":"localStorage","mode":"set","key":"login_action","value":event.target.value});
 		});
 
 		document.getElementById("username").focus();
 	});
 }
-function delete_clicker (account)
-{
-	return function ()
-	{
+
+function delete_clicker (account) {
+	return function () {
 		if(confirm("Are you sure you want to delete the account " + account.username + " from LJ Juggler?")) delete_account(account.username);
 	};
 }
-function delete_account(username)
-{
-	chrome.runtime.sendMessage({"command":"localStorage","mode":"get","key":"lj_juggler_accounts"}, function (response)
-	{
+
+function delete_account(username) {
+	chrome.runtime.sendMessage({"command":"localStorage","mode":"get","key":"lj_juggler_accounts"}, function (response) {
 		var account_list = JSON.parse(response.value);
-		for (var i = 0; account_list[i]; i++)
-		{
-			if (account_list[i].username == username)
-			{
+		for (var i = 0; account_list[i]; i++) {
+			if (account_list[i].username == username) {
 				account_list.splice(i, 1);
 				chrome.runtime.sendMessage({"command":"localStorage","mode":"set","key":"lj_juggler_accounts","value":JSON.stringify(account_list)});
 				break;
@@ -109,25 +106,40 @@ function delete_account(username)
 		drawlist();
 	});
 }
-function save_new_account()
-{
+
+function save_new_account() {
 	var username = document.getElementById("username").value;
 	var password = document.getElementById("password").value;
-	var site_info_index = document.getElementById("sitedropdown").value;
-	if(username && password)
-	{
-                // Non-Dreamwidth services can use challenge auth, so store password hash
-                if(LJlogin_sites[site_info_index].name != 'Dreamwidth') {
-                        password = md5(password);
-                }
-		chrome.runtime.sendMessage({"command":"newAccount","account":{"username":username,"password":password,"site_info":LJlogin_sites[site_info_index]}}, function (response)
-		{
-			if(response == "ok")
-			{
-				drawlist();
+	var site_info_select = document.getElementById("sitedropdown");
+	var site_info_options = site_info_select.options;
+	var site_info_index = site_info_select.selectedIndex;
+	var site_info_value = site_info_options[site_info_index].value;
+	if(username && password) {
+		// Non-Dreamwidth services can use challenge auth, so store password hash
+    if(LJlogin_sites[site_info_value].name != 'Dreamwidth') {
+    	password = md5(password);
+    }
+		console.log(`Registering _O_${username} of ${LJlogin_sites[site_info_value].name}.`);
+		let msg = {
+			"command": "newAccount",
+			"account": {
+				"username": username,
+				"password": password,
+				"site_info": LJlogin_sites[site_info_value]
 			}
-			else {
-				alert("There was an error confirming the account " + username + ".  This is usually caused by a typo in username or password, or picking the wrong site in the dropdown.");
+		}
+		chrome.runtime.sendMessage(msg, function (response) {
+			if(response == "ok") {
+				drawlist();
+			} else {
+				console.log(`Error for _O_${username} of ${LJlogin_sites[site_info_value].name}.`);
+				console.log(response);
+				msg.account.password = "";
+				console.log(msg);
+				alert(
+					`There was an error confirming _O_${username} of ${LJlogin_sites[site_info_value].name}.` + "\n" +
+					"This is usually caused by a typo in username or password, or picking the wrong site in the dropdown."
+				);
 			}
 		});
 	}
@@ -135,16 +147,16 @@ function save_new_account()
 	document.getElementById("password").value = "";
 	return false;
 }
-function initialize()
-{
+
+function initialize() {
 	chrome.runtime.sendMessage({"command":"localStorage","mode":"get","key":"theme"}, function (response) {document.getElementById("theme").value = response.value
-	setTheme();
+		setTheme();
 	})
-	for(var i = 0; i < LJlogin_sites.length; i++)
-	{
-		var site = LJlogin_sites[i];
+	let ordered_sites = [...LJlogin_sites ];
+	ordered_sites.sort((a, b) => (a.name > b.name ? 1 : -1));
+	for(var site of ordered_sites) {
 		var next_option = document.createElement("option");
-		next_option.value = i;
+		next_option.value = LJlogin_keys.indexOf(site.name).toString();
 		next_option.textContent = site.name;
 		document.getElementById("sitedropdown").appendChild(next_option);
 	}
@@ -162,12 +174,13 @@ function initialize()
 		handleFile();
 	})
 }
-function accountsort(account_one, account_two)
-{
+
+function accountsort(account_one, account_two) {
 	if(account_one.site_info.name < account_two.site_info.name) return -1;
 	else if(account_one.site_info.name > account_two.site_info.name) return 1;
 	else if(account_one.username < account_two.username) return -1;
 	else if(account_one.username > account_two.username) return 1;
 	else return 0;
 }
+
 window.onload=function() { initialize(); };

@@ -1,0 +1,76 @@
+/*  options page CSS */
+.wrapper {
+	background-color: #fdfdfd;
+	text-align: left;
+	padding: 5px 18px 5px 18px;
+	width: auto;
+  border: 1px solid #c9cacb;
+	border-radius: 10px;
+	display: inline-block;
+	position: relative;
+}
+.dark .wrapper {
+	background-color: #252525;
+	border: 1px solid #9b9b9b;
+}
+
+#new_account {
+	text-align: left;
+}
+
+#option_list {
+	border-top: 1px solid #d9dadb;
+}
+#option_list li {
+	cursor: pointer;
+	font-weight: normal;
+}
+.dark #option_list li {
+	color: #9b9b9b;
+}
+#option_list li:hover {
+	background-color: #ddd;
+	color: #b30000;
+}
+.dark #option_list li:hover {
+	background-color: #ddd;
+	color: #4285f4;
+}
+
+.site-label {
+	color: #666;
+	cursor: default;
+	font-size: 0.8em;
+	padding: 4px;
+	text-align: center;
+	font-weight: bold;
+}
+.dark .site-label {
+	color: #9b9b9b;
+}
+
+#account-list {
+	cursor: default;
+}
+
+button /* this is for the delete button */ {
+	background: url(../images/deleteaccount.png) no-repeat center center;
+	border: none;
+	cursor: pointer;
+	margin: 0 15px 0 4px;
+	padding: 0;
+	height: 14px;
+	width: 13px;
+	float: right;
+}
+button:hover {
+	background: url(../images/deleteaccount_hover.png) no-repeat center center;
+}
+
+p.desc {
+	text-align: center;
+	color: #8c8c8c;
+}
+#subtheme, #import {
+	float: right;
+}

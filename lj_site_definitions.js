@@ -3,37 +3,46 @@
 var LJlogin_sites = [
 	{
 		name: 'Dreamwidth',
-		domain: '.dreamwidth.org',
-		cookieurl: 'https://www.dreamwidth.org/',
-		cookiename: 'ljmastersession',
-		interfaceurl: 'https://www.dreamwidth.org/interface/flat',
+		cookieurl: 'https://www.dreamwidth.org',
+		userhead: 'https://www.dreamwidth.org/img/silk/identity/user.png'
 	},
 	{
 		name: 'LiveJournal',
-		domain: '.livejournal.com',
-		cookieurl: 'https://www.livejournal.com/',
-		cookiename: 'ljmastersession',
-		interfaceurl: 'https://www.livejournal.com/interface/flat',
+		cookieurl: 'https://www.livejournal.com',
+		userhead: 'https://l-stat.livejournal.net/img/userinfo_v8.svg'
 	},
 	{
 		name: 'InsaneJournal',
-		domain: '.insanejournal.com',
-		cookieurl: 'https://www.insanejournal.com/',
-		cookiename: 'ljmastersession',
-		interfaceurl: 'https://www.insanejournal.com/interface/flat',
+		cookieurl: 'https://www.insanejournal.com'
 	},
 	{
 		name: 'Scribbld',
-		domain: '.scribbld.com',
-		cookieurl: 'http://www.scribbld.com/',
-		cookiename: 'ljmastersession',
-		interfaceurl: 'http://www.scribbld.com/interface/flat',
+		cookieurl: 'http://www.scribbld.com'
+	},
+	{
+		name: 'DeadJournal',
+		cookieurl: 'http://www.deadjournal.com',
+		userhead: 'http://piktures.deadjournal.com/userinfo.gif'
 	}
 ];
 
 // Build a key-based look-up for the above data
-
-var LJlogin_keys = {};
-for (var i = 0; i < LJlogin_sites.length; i++) {
-	LJlogin_keys[LJlogin_sites[i].name] = LJlogin_sites[i];
+var LJlogin_keys = [];
+let i = 0;
+for (var site of LJlogin_sites) {
+	if (! site?.domain) {
+		site.domain = site.cookieurl.substring(site.cookieurl.indexOf(".")).replace(/\//g, "")
+	}
+	if (! site?.cookiename) {
+		site.cookiename = "ljmastersession"
+	}
+	if (! site?.userhead) {
+		site.userhead = site.cookieurl + "/img/userinfo.gif"
+	}
+	if (! site?.interfaceurl) {
+		site.interfaceurl = site.cookieurl + "/interface/flat"
+	}
+	LJlogin_sites[i] = site;
+	LJlogin_keys[i] = site.name;
+	i++;
 }

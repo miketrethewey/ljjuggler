@@ -1,0 +1,64 @@
+/* New account form CSS */
+#new_account {
+	margin: 0;
+}
+#sitedropdown, #username, #password {
+	width: 100%;
+}
+.dark #password {
+	background-color: #424242;
+	color: #DED9D9;
+}
+label /* add account form labels */ {
+	font: 0.8em Verdana, Helvetica, sans-serif;
+	display: inline-block;
+	padding: 5px 15px 5px 0px;
+}
+.col-form {
+	float: left;
+	text-align: right;
+	width: 25%;
+	margin-top: 6px;
+}
+.col-element {
+	float: left;
+	width: 35%;
+	margin-top: 6px;
+}
+/* Clear floats after the cols */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.submit {
+	background: #e9eaeb url(../images/addaccount.png) no-repeat 6px 50%;
+	font-size: 0.8em;
+	color: #000;
+	cursor: pointer;
+	float: right;
+	margin: 15px 0 1.5em 0;
+	padding: 4px 6px 4px 26px;
+	border: 1px solid #c9cacb;
+	width: auto;
+}
+.dark .submit {
+	background: #424242 url(/images/addaccount.png) no-repeat 6px 50%;
+	color: #DED9D9;
+}
+.dark .submit:hover {
+	background: #676769 url(/images/addaccount_hover.png) no-repeat 6px 50%;
+	color: #DED9D9;
+}
+.submit:hover {
+	color: #147a23;
+	background: #f5f6f7 url(/images/addaccount_hover.png) no-repeat 6px 50%;
+	border-color: #d9dadb;
+}
+/* Make it responsive: When the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .col-form, .col-element {
+    width: 45%;
+    margin-top: 0;
+  }
+}

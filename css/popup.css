@@ -1,0 +1,46 @@
+/*  Popup page CSS */
+.popup-wrapper {
+  background-color: #fdfdfd;
+	text-align: left;
+	padding: 5px 10px 5px 10px;
+	width: auto;
+  border: 1px solid #c9cacb;
+	border-radius: 10px;
+	display: inline-block;
+	position: relative;
+}
+.dark .popup-wrapper {
+	background-color: #252525;
+}
+#user_list li {
+	/* background: url(../images/user.png) no-repeat 4px center; */
+	padding: 0 0 0 0;
+	cursor: pointer;
+}
+.dark #user_list li {
+	color: #9b9b9b;
+	/* background: url(../images/user-dark.png) no-repeat 4px center; */
+}
+#user_list li:hover {
+	/* background: #ddd url(../images/user_hover.png) no-repeat 4px center; */
+	color: #147a23;
+}
+.dark #user_list li:hover {
+	color: #147a23;
+}
+#user_list li.select {
+	/* background: url(../images/user_selected.png) no-repeat 4px center; */
+	font-weight: bold;
+	font-style: italic;
+	color: #217a86;
+}
+.dark #user_list li.select {
+	color: #4285f4;
+}
+#user_list li.select:hover {
+	background-color: #ddd;
+}
+
+#options_page_link {
+	white-space: nowrap;
+}

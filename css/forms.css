@@ -1,0 +1,40 @@
+/* Form elements */
+input[type=text], select, #browse, #password {
+	border: 1px solid #7a7a7b;
+	background-color: #fafafa;
+	color: #000;
+	box-sizing: border-box;
+	resize: vertical;
+}
+.dark input[type=text], .dark select {
+	background-color: #424242;
+	color: #DED9D9;
+}
+#browse {
+	width: 75%;
+}
+#export, #import, #subtheme {
+	background-color: #e9eaeb;
+	color: #000;
+	cursor: pointer;
+	margin: 0 0 1.5em 0;
+	padding: 4px 6px 4px 4px;
+	border: 1px solid #c9cacb;
+	width: auto;
+}
+.dark #export, .dark #browse, .dark #import, .dark #subtheme {
+	background-color: #424242;
+	color: #DED9D9;
+}
+.dark #export:hover, .dark #import:hover, .dark #subtheme:hover {
+	background-color: #676769;
+	color: #DED9D9;
+}
+#export:hover, #import:hover, #subtheme:hover {
+	color: #147a23;
+	background-color: #f5f6f7;
+	border-color: #d9dadb;
+}
+#theme {
+	width: 25%;
+}
