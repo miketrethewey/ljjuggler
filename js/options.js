@@ -57,17 +57,27 @@ function drawlist() {
 			}
 			var account = account_list[i];
 			var next_account = document.createElement("li");
+
+			var baseurl = document.createElement("a");
+			baseurl.href = account_list[i].site_info.cookieurl + `/~${account.username}`
+			baseurl.textContent = account.username
+			var profile = document.createElement("a");
+			profile.href = baseurl.href + "/info";
+
 			var userhead = document.createElement("img");
 			userhead.src = account_list[i].site_info.userhead;
 			userhead.width = 17;
 			userhead.height = 17;
 			userhead.style.verticalAlign = "middle";
-			var username = document.createTextNode(account.username);
+
+			profile.appendChild(userhead);
+
 			var delete_button = document.createElement("button");
 			delete_button.id = account.username;
 			delete_button.onclick = delete_clicker(account);
-			next_account.appendChild(userhead);
-			next_account.appendChild(username);
+
+			next_account.appendChild(profile);
+			next_account.appendChild(baseurl);
 			next_account.appendChild(delete_button);
 			document.getElementById("account-list").appendChild(next_account);
 		}
